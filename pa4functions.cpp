@@ -5,7 +5,8 @@
 bool underwood::GREETING(void)
 {
     std::cout << "Greetings user." << std::endl
-              << "This program was made for CSCI 3320 Program Assignment 3 Spring 2013:"
+              << "This program was made for CSCI 3320 "
+              << "Program Assignment 4 Spring 2013:" << std::endl
               << "By: Joshua Underwood"
               << std::endl << std::endl;
     return true;
