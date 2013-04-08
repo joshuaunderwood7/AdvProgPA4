@@ -22,12 +22,15 @@ class members
     std::string name;
     double yearly_dues;
     double mothly_average;
+    bool deletion;
 
     members(std::string _name = "", double _yearly_dues = 0.0):
-        name(_name), yearly_dues(_yearly_dues) { mothly_average = yearly_dues/12.0; }
+        name(_name), yearly_dues(_yearly_dues) 
+    { 
+        mothly_average = yearly_dues/12.0; 
+        deletion = false;
+    }
 
-//    members(std::string _name = "", double _yearly_dues = 0.0, double _monthly_average = 0.0):
-//        name(_name), yearly_dues(_yearly_dues), mothly_average(_monthly_average) {}
 };
 
 //forward decl for friend function

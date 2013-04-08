@@ -41,20 +41,21 @@ Hash<Key,Value>::~Hash()
 template <typename Key, typename Value>
 Value Hash<Key,Value>::get(const Key& input)
 {
-    unsigned long hashVal = 0;
-   try{ //for std::strings or keys with length()
+    unsigned long hashVal = max_size; 
+
     for(int i = 0; i < input.length(); ++i)
     {
         hashVal<<2;
         hashVal += input[i];
     }   
-   }
-   catch(std::exception ex){ //for numbers
-    hashVal = long(input);
-   }
 
-    if(exists[hashVal]) return list[hashVal];
-    return Value(0);
+    hashVal = hashVal%max_size;
+    while(exists[hashVal] && !list[hashVal].deletion)
+    {
+        return list[hashVal];
+    }
+    std::cerr << input << " not found in table" << std::endl;
+    return Value();
 };
 
 template <typename Key, typename Value>
@@ -73,23 +74,18 @@ bool Hash<Key, Value>::set(const Key& input_key, const Value& input_value)
 template <typename Key, typename Value>
 unsigned long Hash<Key, Value>::hash(const Key& input, const Value& val)
 {
-    unsigned long hashVal = 0; 
+    unsigned long hashVal = max_size; 
 
-   try{ //for std::strings or keys with length()
     for(int i = 0; i < input.length(); ++i)
     {
         hashVal<<2;
         hashVal += input[i];
     }   
-   }
-   catch(std::exception ex){ //for numbers
-    hashVal = long(input);
-   }
 
     hashVal = hashVal%max_size;
     while(exists[hashVal])
     {
-        if(list[hashVal] == val) return hashVal;
+        if(list[hashVal].name == val.name) return hashVal;
         hashVal++;
         hashVal = hashVal%max_size;
     }
