@@ -15,8 +15,12 @@ namespace Underwood
 {
 
 //forward decl for friend function
-template <typename Key, typename Value> Value& operator [] (const &Hash input);
-std::ostream operator << (std::ostream& out , const &Hash<Key,Value> input);
+
+template <typename Key, typename Value>
+class Hash;
+
+template <typename Key, typename Value> 
+std::ostream& operator <<  (std::ostream& out , const Hash<Key,Value> &input);
 
 template <typename Key, typename Value>
 class Hash
@@ -29,16 +33,16 @@ class Hash
     Value get(const Key& input);
     bool set(const Key& input_key, const Value& input_value);
 
-    unsigned long hash(const Key& input);
+    unsigned long hash(const Key& input, const Value& val);
    
     //operators 
     //
     // pre: element at [location] is present
     // post: returns element at [location]. segmentation fault otherwise
     //       (may throw exception at later date, will revise this comment)
-    friend Value& operator [] (const &Hash input);
+    Value& operator [] (const Hash<Key, Value> &input);
     // post: displays Hash table in tabular form.
-    friend std::ostream operator << (std::ostream& out , const &Hash<Key,Value> input);
+    friend std::ostream& operator << <Key,Value> (std::ostream& out , const Hash<Key,Value> &input);
 
    private:
     Value list[];
@@ -49,7 +53,7 @@ class Hash
     //post: replaces the list[] with a larger container and properly
     //      destructs the old one. returns FALSE if error, returns TRUE
     //      otherwise.
-    bool long grow_list(void);
+    bool grow_list(void);
     //pre: internal use only to calculate how "full" the hash table is.
     //post: returns integer representation of the "fullness" of hash table.
     unsigned long percent_full(void);
@@ -61,7 +65,7 @@ class Hash
     //pre: element has a "deleted" boolean member
     //post: removes elements marked for deletion
     bool clean(void); 
-}
+};
 
 }
 

@@ -1,14 +1,12 @@
 #include <iostream>
+#include <exception>
 
 namespace Underwood
 {
 
-template <typename Key, typename Value> Value& operator [] (const &Hash input);
-template <typename Key, typename Value>
-std::ostream operator << (std::ostream& out , const &Hash<Key,Value> input);
 
 template <typename Key, typename Value>
-Hash::Hash()
+Hash<Key,Value>::Hash()
 {
     //251 is greatest prime <= 256.
     list = new Value[251];  
@@ -20,7 +18,7 @@ Hash::Hash()
 };
 
 template <typename Key, typename Value>
-Hash::Hash(unsigned long input)
+Hash<Key,Value>::Hash(unsigned long input)
 {
     list = new Value[input];  
     exists = new bool[input];
@@ -31,7 +29,7 @@ Hash::Hash(unsigned long input)
 }; 
 
 template <typename Key, typename Value>
-Hash::~Hash()
+Hash<Key,Value>::~Hash()
 {
     for(unsigned long i = 0; i < max_size; ++i)
     {
@@ -41,14 +39,39 @@ Hash::~Hash()
 
 
 template <typename Key, typename Value>
-Value Hash::get(const Key& input);
+Value Hash<Key,Value>::get(const Key& input)
+{
+    unsigned long hashVal = 0;
+   try{ //for std::strings or keys with length()
+    for(int i = 0; i < input.length(); ++i)
+    {
+        hashVal<<2;
+        hashVal += input[i];
+    }   
+   }
+   catch(std::exception ex){ //for numbers
+    hashVal = long(input);
+   }
+
+    if(exists[hashVal]) return list[hashVal];
+    return Value(0);
+};
 
 template <typename Key, typename Value>
-bool Hash::set(const Key& input_key, const Value& input_value);
+bool Hash<Key, Value>::set(const Key& input_key, const Value& input_value)
+{
+    unsigned long location = hash(input_key, input_value);
+    list[location] = input_value;
+    exists[location] = true;
+    used++;
+
+    //check here for size, see if list needs to be lengthened
+    return true;
+};
 
 
 template <typename Key, typename Value>
-unsigned long Hash::hash(const Key& input)
+unsigned long Hash<Key, Value>::hash(const Key& input, const Value& val)
 {
     unsigned long hashVal = 0; 
 
@@ -59,28 +82,65 @@ unsigned long Hash::hash(const Key& input)
         hashVal += input[i];
     }   
    }
-   catch{ //for numbers
-    hashVal = unsigned long(input);
+   catch(std::exception ex){ //for numbers
+    hashVal = long(input);
    }
 
     hashVal = hashVal%max_size;
-    
-
+    while(exists[hashVal])
+    {
+        if(this[hashVal] == val) return hashVal;
+        hashVal++;
+        hashVal = hashVal%max_size;
+    }
     return hashVal;
 };
    
 
 template <typename Key, typename Value>
-bool long Hash::grow_list(void);
+bool Hash<Key, Value>::grow_list(void){};
 
 template <typename Key, typename Value>
-unsigned long Hash::percent_full(void);
+unsigned long Hash<Key, Value>::percent_full(void)
+{
+    unsigned long percent = used * 100;
+    return percent/max_size;    
+};
 
 template <typename Key, typename Value>
-bool Hash::destruct_list(Value* victim);
+bool Hash<Key, Value>::destruct_list(Value* victim)
+{
+    for(unsigned long i = 0; i < max_size; ++i)
+    {
+        if(exists[i])
+        {
+            exists[i] = false;
+            delete victim[i];
+        }
+    }    
+};
 
 template <typename Key, typename Value>
-bool Hash::clean(void); 
+bool Hash<Key, Value>::clean(void)
+{
+    for(unsigned long i = 0; i < max_size; ++i)
+    {
+      if(exists[i])
+      {
+        if(list[i].deletion)
+        {
+            exists[i] = false;
+            delete list[i];
+        }
+      }
+    }    
+}; 
+
+template <typename Key, typename Value> 
+Value& Hash<Key, Value>::operator [] (const Hash<Key, Value> &input){};
+
+template <typename Key, typename Value> 
+std::ostream& operator << (std::ostream& out , const Hash<Key,Value> &input);
 
 }
 
