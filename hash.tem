@@ -1,0 +1,86 @@
+#include <iostream>
+
+namespace Underwood
+{
+
+template <typename Key, typename Value> Value& operator [] (const &Hash input);
+template <typename Key, typename Value>
+std::ostream operator << (std::ostream& out , const &Hash<Key,Value> input);
+
+template <typename Key, typename Value>
+Hash::Hash()
+{
+    //251 is greatest prime <= 256.
+    list = new Value[251];  
+    exists = new bool[251];
+    for(unsigned int i = 0; i < 251; ++i)
+        exists[i] = false;
+    max_size = 251;
+    used = 0;
+};
+
+template <typename Key, typename Value>
+Hash::Hash(unsigned long input)
+{
+    list = new Value[input];  
+    exists = new bool[input];
+    for(unsigned long i = 0; i < input; ++i)
+        exists[i] = false;
+    max_size = input;
+    used = 0;
+}; 
+
+template <typename Key, typename Value>
+Hash::~Hash()
+{
+    for(unsigned long i = 0; i < max_size; ++i)
+    {
+        if(exists[i]) delete list[i];
+    }
+};
+
+
+template <typename Key, typename Value>
+Value Hash::get(const Key& input);
+
+template <typename Key, typename Value>
+bool Hash::set(const Key& input_key, const Value& input_value);
+
+
+template <typename Key, typename Value>
+unsigned long Hash::hash(const Key& input)
+{
+    unsigned long hashVal = 0; 
+
+   try{ //for std::strings or keys with length()
+    for(int i = 0; i < input.length(); ++i)
+    {
+        hashVal<<2;
+        hashVal += input[i];
+    }   
+   }
+   catch{ //for numbers
+    hashVal = unsigned long(input);
+   }
+
+    hashVal = hashVal%max_size;
+    
+
+    return hashVal;
+};
+   
+
+template <typename Key, typename Value>
+bool long Hash::grow_list(void);
+
+template <typename Key, typename Value>
+unsigned long Hash::percent_full(void);
+
+template <typename Key, typename Value>
+bool Hash::destruct_list(Value* victim);
+
+template <typename Key, typename Value>
+bool Hash::clean(void); 
+
+}
+
