@@ -52,7 +52,9 @@ Value Hash<Key,Value>::get(const Key& input)
     hashVal = hashVal%max_size;
     while(exists[hashVal] && !list[hashVal].deletion)
     {
-        return list[hashVal];
+        if(list[hashVal].name == input) return list[hashVal];
+        hashVal++;
+        hashVal = hashVal%max_size;
     }
     std::cerr << input << " not found in table" << std::endl;
     return Value();
@@ -133,10 +135,29 @@ bool Hash<Key, Value>::clean(void)
 }; 
 
 template <typename Key, typename Value> 
-Value& Hash<Key, Value>::operator [] (const Hash<Key, Value> &input){};
+Value Hash<Key, Value>::operator [] (const Key &input)
+{
+    return get(input);
+};
 
 template <typename Key, typename Value> 
-std::ostream& operator << (std::ostream& out , const Hash<Key,Value> &input);
+std::ostream& operator << (std::ostream& out , const Hash<Key,Value> &input)
+{
+    out << "--Name--|-Jan|-Feb|-Mar|-Apr|-May|-Jun|-Jul|-Aug|-Sep|-Nov|-Dec|-Avg|-Anual\n";
+    for(unsigned long i = 0; i < input.max_size; ++i)
+    {
+        if(input.exists[i] && !input.list[i].deletion)
+        {
+           out << input.list[i].name;
+           for(int j = 0; j < 12; ++j)
+           {
+              out << " $" << input.list[i].monthly_dues[j]; 
+           }
+           out << input.list[i].mothly_average << " " << input.list[i].yearly_dues << "\n";
+        }
+    }
+    return out;
+};
 
 }
 

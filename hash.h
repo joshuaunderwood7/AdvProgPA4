@@ -20,6 +20,7 @@ class members
 {
   public:
     std::string name;
+    double monthly_dues[12];
     double yearly_dues;
     double mothly_average;
     bool deletion;
@@ -28,6 +29,7 @@ class members
         name(_name), yearly_dues(_yearly_dues) 
     { 
         mothly_average = yearly_dues/12.0; 
+        for(int i = 0; i<12; ++i) monthly_dues[i] = mothly_average;
         deletion = false;
     }
 
@@ -59,7 +61,7 @@ class Hash
     // pre: element at [location] is present
     // post: returns element at [location]. segmentation fault otherwise
     //       (may throw exception at later date, will revise this comment)
-    Value& operator [] (const Hash<Key, Value> &input);
+    Value operator [] (const Key &input);
     // post: displays Hash table in tabular form.
     friend std::ostream& operator << <Key,Value> (std::ostream& out , const Hash<Key,Value> &input);
 
