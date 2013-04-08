@@ -10,9 +10,25 @@
 #ifndef UNDERWOOD_HASH_
 #define UNDERWOOD_HASH_
 #include <iostream>
+#include <string>
 
 namespace Underwood
 {
+
+//members is default struct for testing and assignment
+class members
+{
+  public:
+    std::string name;
+    double yearly_dues;
+    double mothly_average;
+
+    members(std::string _name = "", double _yearly_dues = 0.0):
+        name(_name), yearly_dues(_yearly_dues) { mothly_average = yearly_dues/12.0; }
+
+//    members(std::string _name = "", double _yearly_dues = 0.0, double _monthly_average = 0.0):
+//        name(_name), yearly_dues(_yearly_dues), mothly_average(_monthly_average) {}
+};
 
 //forward decl for friend function
 
@@ -45,8 +61,8 @@ class Hash
     friend std::ostream& operator << <Key,Value> (std::ostream& out , const Hash<Key,Value> &input);
 
    private:
-    Value list[];
-    bool exists[];
+    Value *list;
+    bool *exists;
     unsigned long max_size, used;
 
     //pre: internal use only to replace the list[] with a larger container.

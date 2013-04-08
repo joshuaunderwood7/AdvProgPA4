@@ -33,7 +33,7 @@ Hash<Key,Value>::~Hash()
 {
     for(unsigned long i = 0; i < max_size; ++i)
     {
-        if(exists[i]) delete list[i];
+//        if(exists[i]) delete list[i];
     }
 };
 
@@ -89,7 +89,7 @@ unsigned long Hash<Key, Value>::hash(const Key& input, const Value& val)
     hashVal = hashVal%max_size;
     while(exists[hashVal])
     {
-        if(this[hashVal] == val) return hashVal;
+        if(list[hashVal] == val) return hashVal;
         hashVal++;
         hashVal = hashVal%max_size;
     }
