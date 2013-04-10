@@ -11,26 +11,56 @@
 #define UNDERWOOD_HASH_
 #include <iostream>
 #include <string>
+#include <vector>
 
 namespace Underwood
 {
 
-//members is default struct for testing and assignment
+//members is default object for testing and assignment
 class members
 {
   public:
     std::string name;
     double monthly_dues[12];
+    double monthly_hours[12];
     double yearly_dues;
-    double mothly_average;
+    double yearly_hours;
+    double mothly_average_dues;
+    double mothly_average_hours;
+
+    //needed elements for Hash
     bool deletion;
 
     members(std::string _name = "", double _yearly_dues = 0.0):
         name(_name), yearly_dues(_yearly_dues) 
     { 
-        mothly_average = yearly_dues/12.0; 
-        for(int i = 0; i<12; ++i) monthly_dues[i] = mothly_average;
+        mothly_average_dues = yearly_dues/12.0; 
+        for(int i = 0; i<12; ++i) monthly_dues[i] = mothly_average_dues;
         deletion = false;
+    }
+
+    bool setHours(double *hours)
+    {
+        yearly_hours = 0;
+        for(int i = 0; i < 12; ++i)
+        {
+            monthly_hours[i] = hours[i];
+            yearly_hours += hours[i];
+        }
+        mothly_average_hours = yearly_hours/12;
+        return true;
+    }
+
+    bool setDues(double *dues)
+    {
+        yearly_dues = 0;
+        for(int i = 0; i < 12; ++i)
+        {
+            monthly_dues[i] += dues[i];
+            monthly_dues[i] = dues[i];
+        }
+        mothly_average_dues = yearly_dues/12;
+        return true;
     }
 
 };
@@ -55,6 +85,8 @@ class Hash
     bool set(const Key& input_key, const Value& input_value);
 
     unsigned long hash(const Key& input, const Value& val);
+
+    std::vector<std::string> getKeys(void);
    
     //operators 
     //

@@ -96,6 +96,20 @@ unsigned long Hash<Key, Value>::hash(const Key& input, const Value& val)
    
 
 template <typename Key, typename Value>
+std::vector<std::string> Hash<Key, Value>::getKeys(void)
+{
+    std::vector<std::string> keys;
+    for(unsigned long i = 0; i < this->max_size; ++i)
+    {
+        if(exists[i] && !list[i].deletion)
+        {
+            keys.push_back(list[i].name);
+        }
+    }
+    return keys;
+};
+
+template <typename Key, typename Value>
 bool Hash<Key, Value>::grow_list(void){};
 
 template <typename Key, typename Value>
@@ -153,7 +167,7 @@ std::ostream& operator << (std::ostream& out , const Hash<Key,Value> &input)
            {
               out << " $" << input.list[i].monthly_dues[j]; 
            }
-           out << input.list[i].mothly_average << " " << input.list[i].yearly_dues << "\n";
+           out << input.list[i].mothly_average_dues << " " << input.list[i].yearly_dues << "\n";
         }
     }
     return out;
