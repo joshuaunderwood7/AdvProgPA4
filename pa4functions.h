@@ -1,16 +1,23 @@
-#ifndef PA2FUNCTIONS
-#define PA2FUNCTIONS
+#ifndef PA4FUNCTIONS
+#define PA4FUNCTIONS
 
 #include <cstdlib>
+#include <string>
+#include "hash.h"
 
 namespace Underwood
 {
-    bool READPEOPLEFILE(std::string filename, Hash &target);
-    bool CALCULATEDUES(std::string filename, Hash &target);
+    template <typename Key, typename Value>
+    bool READPEOPLEFILE(std::string filename, Hash<Key, Value> &target);
+
+    template <typename Key, typename Value>
+    bool CALCULATEDUES(std::string filename, Hash<Key, Value> &target);
+    
     bool GREETING(void);
     bool ENTER_TO_CONTINUE(void);
 }
 
+#include "pa4functions.tem"
 
 
 #endif

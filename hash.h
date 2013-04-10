@@ -56,7 +56,7 @@ class members
         yearly_dues = 0;
         for(int i = 0; i < 12; ++i)
         {
-            monthly_dues[i] += dues[i];
+            yearly_dues += dues[i];
             monthly_dues[i] = dues[i];
         }
         mothly_average_dues = yearly_dues/12;
@@ -81,7 +81,7 @@ class Hash
     Hash(unsigned long input); //initialized Hash table to be of certain size;
     ~Hash();
 
-    Value get(const Key& input);
+    Value& get(const Key& input);
     bool set(const Key& input_key, const Value& input_value);
 
     unsigned long hash(const Key& input, const Value& val);
@@ -93,7 +93,7 @@ class Hash
     // pre: element at [location] is present
     // post: returns element at [location]. segmentation fault otherwise
     //       (may throw exception at later date, will revise this comment)
-    Value operator [] (const Key &input);
+    Value& operator [] (const Key &input);
     // post: displays Hash table in tabular form.
     friend std::ostream& operator << <Key,Value> (std::ostream& out , const Hash<Key,Value> &input);
 

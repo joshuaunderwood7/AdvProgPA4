@@ -39,7 +39,7 @@ Hash<Key,Value>::~Hash()
 
 
 template <typename Key, typename Value>
-Value Hash<Key,Value>::get(const Key& input)
+Value& Hash<Key,Value>::get(const Key& input)
 {
     unsigned long hashVal = max_size; 
 
@@ -56,8 +56,8 @@ Value Hash<Key,Value>::get(const Key& input)
         hashVal++;
         hashVal = hashVal%max_size;
     }
-    std::cerr << input << " not found in table" << std::endl;
-    return Value();
+    std::cerr << input << " not found in table. You should not trust output." << std::endl;
+    return list[0];
 };
 
 template <typename Key, typename Value>
@@ -149,7 +149,7 @@ bool Hash<Key, Value>::clean(void)
 }; 
 
 template <typename Key, typename Value> 
-Value Hash<Key, Value>::operator [] (const Key &input)
+Value& Hash<Key, Value>::operator [] (const Key &input)
 {
     return get(input);
 };
@@ -167,7 +167,7 @@ std::ostream& operator << (std::ostream& out , const Hash<Key,Value> &input)
            {
               out << " $" << input.list[i].monthly_dues[j]; 
            }
-           out << input.list[i].mothly_average_dues << " " << input.list[i].yearly_dues << "\n";
+           out << " $" << input.list[i].mothly_average_dues << " " << input.list[i].yearly_dues << "\n";
         }
     }
     return out;
