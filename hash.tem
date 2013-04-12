@@ -1,5 +1,7 @@
 #include <iostream>
 #include <exception>
+#include <iomanip>
+#include <fstream>
 
 namespace Underwood
 {
@@ -157,21 +159,45 @@ Value& Hash<Key, Value>::operator [] (const Key &input)
 template <typename Key, typename Value> 
 std::ostream& operator << (std::ostream& out , const Hash<Key,Value> &input)
 {
-    out << "--Name--|-Jan|-Feb|-Mar|-Apr|-May|-Jun|-Jul|-Aug|-Sep|-Nov|-Dec|-Avg|-Anual\n";
+    out << std::fixed << std::setprecision(2);
     for(unsigned long i = 0; i < input.max_size; ++i)
     {
         if(input.exists[i] && !input.list[i].deletion)
         {
-           out << input.list[i].name;
-           for(int j = 0; j < 12; ++j)
-           {
-              out << " $" << input.list[i].monthly_dues[j]; 
-           }
-           out << " $" << input.list[i].mothly_average_dues << " " << input.list[i].yearly_dues << "\n";
+           out << input.list[i].name << ":\n";
+           out << "\t Average Monthy Dues: $" << input.list[i].mothly_average_dues << "\n" 
+               << "\t Total Yearly Dues  : $" << input.list[i].yearly_dues << "\n";
         }
     }
     return out;
 };
+
+template <typename Key, typename Value> 
+std::ofstream& operator << (std::ofstream& out , const Hash<Key,Value> &input)
+{
+    out << std::setw(8) << "Name"<< std::setw(10) << "Jan" 
+        << std::setw(10) << "Feb" << std::setw(10) << "Mar" 
+        << std::setw(10) << "Apr" << std::setw(10) << "May"
+        << std::setw(10) << "Jun" << std::setw(10) << "Jul" 
+        << std::setw(10) << "Aug" << std::setw(10) << "Sep" 
+        << std::setw(10) << "Nov" << std::setw(10) << "Dec"
+        << std::endl;
+    for(unsigned long i = 0; i < input.max_size; ++i)
+    {
+        if(input.exists[i] && !input.list[i].deletion)
+        {
+           out << std::setw(8) << input.list[i].name << std::setprecision(2);
+           for(int j = 0; j < 12; ++j)
+           {
+              out << " $" << std::setw(8) << input.list[i].monthly_dues[j]; 
+           }
+           out << std::endl;
+        }
+    }
+    return out;
+
+};
+
 
 }
 

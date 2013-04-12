@@ -73,6 +73,9 @@ class Hash;
 template <typename Key, typename Value> 
 std::ostream& operator <<  (std::ostream& out , const Hash<Key,Value> &input);
 
+template <typename Key, typename Value> 
+std::ofstream& operator << (std::ofstream& out , const Hash<Key,Value> &input);
+
 template <typename Key, typename Value>
 class Hash
 {
@@ -96,6 +99,7 @@ class Hash
     Value& operator [] (const Key &input);
     // post: displays Hash table in tabular form.
     friend std::ostream& operator << <Key,Value> (std::ostream& out , const Hash<Key,Value> &input);
+    friend std::ofstream& operator << <Key,Value> (std::ofstream& out , const Hash<Key,Value> &input);
 
    private:
     Value *list;
