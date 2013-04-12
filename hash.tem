@@ -182,6 +182,7 @@ std::ofstream& operator << (std::ofstream& out , const Hash<Key,Value> &input)
         << std::setw(10) << "Aug" << std::setw(10) << "Sep" 
         << std::setw(10) << "Nov" << std::setw(10) << "Dec"
         << std::endl;
+    out << std::fixed << std::setprecision(2);
     for(unsigned long i = 0; i < input.max_size; ++i)
     {
         if(input.exists[i] && !input.list[i].deletion)
